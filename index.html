@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ЛабХаб — Лабораторные работы для студентов</title>
+  <meta name="description" content="ЛабХаб — все лабораторные работы в одном месте. Ищи, изучай и скачивай лабораторные по информатике, математике, физике и другим предметам." />
+  <meta name="keywords" content="лабораторные работы, студентам, ЛабХаб, лабхаб, labkhab, скачать лабораторную, лабораторная онлайн" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.lab-space.ru/" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="ЛабХаб — Лабораторные работы для студентов" />
+  <meta property="og:description" content="Все лабораторные работы в одном месте. Ищи, изучай, скачивай." />
+  <meta property="og:url" content="https://www.lab-space.ru/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ru_RU" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a class="logo" href="#">
+        <span class="logo-icon">⚗️</span>
+        <span class="logo-text">Лаб<strong>Хаб</strong></span>
+      </a>
+      <div class="header-actions">
+        <button class="btn-icon" id="themeToggle" title="Сменить тему" aria-label="Сменить тему">🌙</button>
+        <button class="btn-icon admin-secret" id="adminBtn" title="Панель администратора" aria-label="Войти как администратор">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🎓 Для студентов</div>
+      <h1 class="hero-title">Лаб<strong class="gradient-text">Хаб</strong> —<br/><span class="gradient-text typing-text" id="typingText"></span></h1>
+      <p class="hero-subtitle">Все лабораторные работы в одном месте. Ищи, изучай, скачивай.</p>
+      <div class="search-wrap">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Поиск по названию или предмету..." autocomplete="off" />
+          <button class="search-clear" id="searchClear" aria-label="Очистить поиск">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint"><div class="scroll-arrow"></div></div>
+  </section>
+
+  <!-- FILTERS -->
+  <section class="filters-section">
+    <div class="container">
+      <div class="filters-row">
+        <span class="filters-label">Предмет:</span>
+        <div class="filters" id="filtersContainer">
+          <button class="filter-btn active" data-subject="all">Все</button>
+        </div>
+      </div>
+      <div class="stats-row"><span id="labsCount">Загрузка...</span></div>
+    </div>
+  </section>
+
+  <!-- LABS GRID -->
+  <main class="container" id="mainContainer">
+    <div class="labs-grid" id="labsGrid">
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-icon">🔬</div>
+      <h3>Ничего не найдено</h3>
+      <p>Попробуй изменить поисковый запрос или фильтр</p>
+    </div>
+  </main>
+
+  <!-- MODAL: LAB DETAIL -->
+  <div class="modal-overlay" id="labModal" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <span class="modal-subject" id="modalSubject"></span>
+          <h2 class="modal-title" id="modalTitle"></h2>
+        </div>
+        <button class="modal-close" id="modalClose" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-content" id="modalContent"></div>
+        <div class="modal-file" id="modalFile"></div>
+      </div>
+      <div class="modal-footer" id="modalAdminBar"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: AUTH -->
+  <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true">
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2 class="modal-title">🔐 Вход в панель</h2>
+        <button class="modal-close" id="authClose" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Пароль администратора</label>
+          <input type="password" class="form-input" id="authPassword" placeholder="Введите пароль" />
+          <div class="form-error hidden" id="authError">Неверный пароль</div>
+        </div>
+        <button class="btn btn-primary full-width" id="authSubmit">Войти</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN PANEL -->
+  <div class="modal-overlay" id="adminModal" role="dialog" aria-modal="true">
+    <div class="modal-box modal-large">
+      <div class="modal-header">
+        <h2 class="modal-title">⚙️ Панель администратора</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-danger btn-sm" id="adminLogout">Выйти</button>
+          <button class="modal-close" id="adminClose" aria-label="Закрыть">✕</button>
+        </div>
+      </div>
+      <div class="modal-body admin-body">
+        <div class="admin-section">
+          <h3 class="admin-section-title">➕ Добавить лабораторную</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Название *</label>
+              <input type="text" class="form-input" id="newTitle" placeholder="Лабораторная работа №7" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Предмет *</label>
+              <input type="text" class="form-input" id="newSubject" placeholder="Информатика" list="subjectsList" />
+              <datalist id="subjectsList"></datalist>
+            </div>
+            <div class="form-group full-col">
+              <label class="form-label">Краткое описание *</label>
+              <input type="text" class="form-input" id="newDescription" placeholder="Краткое описание" />
+            </div>
+            <div class="form-group full-col">
+              <label class="form-label">Содержание (Markdown)</label>
+              <textarea class="form-input form-textarea" id="newContent" placeholder="## Цель работы&#10;..."></textarea>
+            </div>
+            <div class="form-group full-col">
+              <label class="form-label">Файл лабораторной (drag & drop)</label>
+              <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">📎</div>
+                <div class="dropzone-text">Перетащи файл сюда или <span class="dropzone-link">выбери вручную</span></div>
+                <div class="dropzone-hint">PDF, DOCX, ZIP — до 10 МБ</div>
+                <input type="file" id="fileInput" class="dropzone-input" accept=".pdf,.doc,.docx,.zip,.rar,.txt,.py,.js,.cpp,.c,.java" />
+              </div>
+              <div class="dropzone-preview hidden" id="dropzonePreview">
+                <span class="dropzone-preview-icon">📄</span>
+                <span class="dropzone-preview-name" id="dropzoneFileName"></span>
+                <button class="dropzone-preview-remove" id="dropzoneRemove" type="button">✕</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-error hidden" id="addError"></div>
+          <button class="btn btn-primary" id="addLabBtn">➕ Добавить</button>
+        </div>
+        <div class="admin-section">
+          <h3 class="admin-section-title">📋 Список лабораторных</h3>
+          <div class="admin-labs-list" id="adminLabsList"><div class="loading-text">Загрузка...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 LabSpace · Все лабораторные работы в одном месте</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
