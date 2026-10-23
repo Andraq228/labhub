@@ -1,0 +1,19 @@
+{
+  "name": "labspace",
+  "version": "1.0.0",
+  "description": "Лабораторные работы для студентов",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "deploy": "npx vercel --prod"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "vercel": "^65.2.0"
+  }
+}
