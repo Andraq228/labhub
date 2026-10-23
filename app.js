@@ -1,5 +1,5 @@
 /* ===== STATE ===== */
-const API = '/api';
+const API = 'https://labspace-student-labs.vercel.app/api';
 let allLabs = [];
 let filteredLabs = [];
 let activeSubject = 'all';
