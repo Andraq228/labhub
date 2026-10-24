@@ -51,8 +51,9 @@ async function saveFileToBin(fileUrl, fileName) {
     });
     return res.data.metadata.id;
   } catch (e) {
-    console.error('saveFileToBin error:', e.message);
-    return null;
+    const detail = e.response ? JSON.stringify(e.response.data) : e.message;
+    console.error('saveFileToBin error:', detail);
+    throw new Error('saveFileToBin failed: ' + detail);
   }
 }
 
