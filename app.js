@@ -328,6 +328,7 @@ async function doLogin() {
     if (data.success) {
       adminToken = data.token;
       sessionStorage.setItem('adminToken', adminToken);
+      localStorage.setItem('adminToken', adminToken);
       closeModal(authModal); openModal(adminModal); renderAdminList();
       showToast('Добро пожаловать, администратор!', 'success');
     } else { authError.classList.remove('hidden'); }
@@ -338,7 +339,7 @@ async function doLogin() {
 adminClose.addEventListener('click', () => closeModal(adminModal));
 adminModal.addEventListener('click', e => { if (e.target === adminModal) closeModal(adminModal); });
 adminLogout.addEventListener('click', () => {
-  adminToken = null; sessionStorage.removeItem('adminToken');
+  adminToken = null; sessionStorage.removeItem('adminToken'); localStorage.removeItem('adminToken');
   closeModal(adminModal); showToast('Вы вышли из панели администратора', 'info');
 });
 
@@ -445,7 +446,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* ===== RESTORE ADMIN SESSION ===== */
-const savedToken = sessionStorage.getItem('adminToken');
+const savedToken = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
 if (savedToken) adminToken = savedToken;
 
 /* ===== INIT ===== */
