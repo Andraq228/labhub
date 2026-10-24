@@ -53,7 +53,7 @@ async function saveFileToBin(fileUrl, fileName) {
   } catch (e) {
     const detail = e.response ? JSON.stringify(e.response.data) : e.message;
     console.error('saveFileToBin error:', detail);
-    throw new Error('saveFileToBin failed: ' + detail);
+    return null; // don't block lab creation if file upload fails
   }
 }
 
