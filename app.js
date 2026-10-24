@@ -290,19 +290,38 @@ function renderCards() {
 }
 
 /* ===== LAB MODAL ===== */
-function openLabModal(id) {
+async function openLabModal(id) {
   const lab = allLabs.find(l => l.id === id);
   if (!lab) return;
   currentLabId = id;
   modalSubject.textContent = lab.subject;
   modalTitle.textContent = lab.title;
   modalContent.innerHTML = simpleMarkdown(lab.content || lab.description);
-  modalFile.innerHTML = lab.fileUrl
-    ? `<a class="file-link" href="${escapeHtml(lab.fileUrl)}" target="_blank" rel="noopener">📎 ${escapeHtml(lab.fileName || 'Скачать файл')}</a>`
-    : '';
   modalAdminBar.innerHTML = adminToken
     ? `<button class="btn btn-danger btn-sm" id="deleteLabBtn">🗑 Удалить лабораторную</button>` : '';
   if (adminToken) document.getElementById('deleteLabBtn').addEventListener('click', () => deleteLab(id));
+
+  // Load file on demand from separate bin
+  if (lab.fileUrl) {
+    modalFile.innerHTML = `<a class="file-link" href="${escapeHtml(lab.fileUrl)}" target="_blank" rel="noopener">📎 ${escapeHtml(lab.fileName || 'Скачать файл')}</a>`;
+  } else if (lab.fileName) {
+    modalFile.innerHTML = `<span class="file-link loading">⏳ Загрузка файла...</span>`;
+    try {
+      const res = await fetch(`${API}/labs/${id}/file`);
+      const data = await res.json();
+      if (data.success && data.fileUrl) {
+        lab.fileUrl = data.fileUrl; // cache locally
+        modalFile.innerHTML = `<a class="file-link" href="${escapeHtml(data.fileUrl)}" target="_blank" rel="noopener">📎 ${escapeHtml(data.fileName || lab.fileName)}</a>`;
+      } else {
+        modalFile.innerHTML = '';
+      }
+    } catch {
+      modalFile.innerHTML = '';
+    }
+  } else {
+    modalFile.innerHTML = '';
+  }
+
   openModal(labModal);
 }
 
